@@ -18,7 +18,6 @@ Usage:
     uv run examples/ur5/convert_ur5_pickle_data_to_lerobot.py \
         --data_dir /scratch/wg25/datasets/real_robot_raw/pick_up_green_lego \
         --output_repo_id ur5/pick_up_green_lego \
-        --output_dir /scratch/wg25/datasets/lerobot_data
 
 Optional flags:
     --push_to_hub: Push the converted dataset to Hugging Face Hub

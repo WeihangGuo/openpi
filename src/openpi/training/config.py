@@ -989,31 +989,6 @@ _CONFIGS = [
     # UR5 Fine-tuning configs.
     #
     TrainConfig(
-        name="pi0_ur5_lora",
-        # Pi0 with LoRA adapters (recommended for ~22.5GB GPU)
-        model=pi0_config.Pi0Config(
-            action_horizon=10,
-            paligemma_variant="gemma_2b_lora",
-            action_expert_variant="gemma_300m_lora",
-        ),
-        data=LeRobotUR5DataConfig(
-            repo_id="ur5/pick_up_green_lego",
-            base_config=DataConfig(
-                prompt_from_task=True,
-            ),
-            use_delta_joint_actions=True,
-        ),
-        weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi0_base/params"),
-        freeze_filter=pi0_config.Pi0Config(
-            paligemma_variant="gemma_2b_lora",
-            action_expert_variant="gemma_300m_lora",
-        ).get_freeze_filter(),
-        num_train_steps=30_000,
-        batch_size=128,
-        save_interval=5_000,
-        ema_decay=None,
-    ),
-    TrainConfig(
         name="pi0_ur5_lora_green_lego_batch_32",
         model=pi0_config.Pi0Config(
             action_horizon=16,
@@ -1062,38 +1037,51 @@ _CONFIGS = [
         ema_decay=None,
     ),
     TrainConfig(
-        name="pi05_ur5_lora",
-        # Pi0.5 with LoRA adapters
+        name="pi0_ur5_lora_yellow_lego_batch_32",
         model=pi0_config.Pi0Config(
-            pi05=True,
-            action_horizon=10,
-            discrete_state_input=False,
+            action_horizon=16,
             paligemma_variant="gemma_2b_lora",
             action_expert_variant="gemma_300m_lora",
         ),
         data=LeRobotUR5DataConfig(
-            repo_id="ur5/pick_up_lego",
+            repo_id="ur5/pick_up_yellow_lego",
             base_config=DataConfig(
                 prompt_from_task=True,
             ),
             use_delta_joint_actions=True,
         ),
-        weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi05_base/params"),
+        weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi0_base/params"),
         freeze_filter=pi0_config.Pi0Config(
-            pi05=True,
             paligemma_variant="gemma_2b_lora",
             action_expert_variant="gemma_300m_lora",
         ).get_freeze_filter(),
         num_train_steps=30_000,
-        batch_size=256,
+        batch_size=32,
         save_interval=5_000,
-        lr_schedule=_optimizer.CosineDecaySchedule(
-            warmup_steps=10_000,
-            peak_lr=5e-5,
-            decay_steps=1_000_000,
-            decay_lr=5e-5,
+        ema_decay=None,
+    ),
+    TrainConfig(
+        name="pi05_ur5_lora_yellow_lego_batch_32",
+        model=pi0_config.Pi0Config(
+            action_horizon=16,
+            paligemma_variant="gemma_2b_lora",
+            action_expert_variant="gemma_300m_lora",
         ),
-        optimizer=_optimizer.AdamW(clip_gradient_norm=1.0),
+        data=LeRobotUR5DataConfig(
+            repo_id="ur5/pick_up_yellow_lego",
+            base_config=DataConfig(
+                prompt_from_task=True,
+            ),
+            use_delta_joint_actions=True,
+        ),
+        weight_loader=weight_loaders.CheckpointWeightLoader("gs://openpi-assets/checkpoints/pi0_base/params"),
+        freeze_filter=pi0_config.Pi0Config(
+            paligemma_variant="gemma_2b_lora",
+            action_expert_variant="gemma_300m_lora",
+        ).get_freeze_filter(),
+        num_train_steps=30_000,
+        batch_size=32,
+        save_interval=5_000,
         ema_decay=None,
     ),
     TrainConfig(
